@@ -1,0 +1,77 @@
+/*********************************************************
+ * HW 4 - arith
+ * Comp 40 Spring 2020 
+ * 3/7/20
+ * Zoe Hsieh, Rebecca Miller
+ * zhsieh01, rmille12
+ *
+ *********************************************************/
+
+To compile the program simply type 'make' in the console with 40image
+You can execute it with './40image'
+Expects 2 commands after, either -c (for compress) or -d (decompress), and a 
+file image (or can accept from stdin)
+
+--- 
+data_types.h       : holds all our structs needed to store different variable 
+                     types for each 
+
+40image.c          : module for reading in the command line and file, and 
+                     determines if the image is going to be compressed or 
+                     decompressed 
+
+compress40.c       : module that calls our other functions to either compress 
+                     or decompress the given image 
+
+RGB_ints_floats.h  : interface of RGB_ints_floats.c
+
+RGB_ints_floats.c  : module that converts all the RGB ints from the given 
+                     image to RGB floats for compression, and vice versa 
+                     for decompression
+
+RGB_VCS.h          : interface of RGB_VCS.c
+
+RGB_VCS.c          : module that uses all the RGB float variables to create 
+                     a new UArray2 of VCS variables for compression and 
+                     vice versa for decompression
+
+VCS_DCT.h          : interface of VCS_DCT.c
+
+VCS_DCT.c          : module that uses the VCS elements to make a new UArray2 
+                     (1/4 the size) of DCT elements for compression, and 
+                     vice versa for compression
+
+
+bitpack.c          : module to perform bitpacking operations, including fit, 
+                     get, and new on unsigned and signed integers for a 
+                     64 bit codeword
+
+codeword.h         : interface codeword.c
+
+codeword.c         : module for packing and unpacking the 2x2 blocks from 
+                     DCT elements (compression) or into DCT elements 
+                     (decompression)
+
+---
+
+Makefile         : standard Makefile needed to compile the programs
+                   
+README           : this file
+
+
+-- things that work correctly and don't ---
+
+- we have tested compressing and decompressing with all images given in 
+the comp40 folder (including the large folder) as well as a couple of others
+found online ourselves. Ppm differences have come out to always be between
+.008 to .04 (.04 was for a very large, very saturated image). 
+
+
+Hours spend on completing assignment: 
+
+    Approx. 12 hours spent on analyzing problems
+    Approx. 23 hours spent on solving problems
+
+Acknowledgments: 
+    - TA Office Hours
+

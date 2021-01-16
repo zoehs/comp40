@@ -1,0 +1,55 @@
+/*********************************************************
+ * HW 2 - iii
+ * Comp 40 Spring 2020 
+ * 2/10/20
+ * Zoe Hsieh, Rebecca Miller
+ * zhsieh01, rmille12
+ *
+ *********************************************************/
+
+unblackedges.c   : takes in an image and outputs the same image without
+                   any black edges (including neighboring edges)
+
+To compile the program simply type 'make' in the console with unblackedges
+You can execute it with './unblackedges'
+Expects 1 command line arg (name of image pbm file) or 0 command line args 
+and will accept from stdin
+
+--- 
+
+sudoku.c         : takes in a sudoku grid and exits with whether or not
+                   it is a solved sudoku grid
+
+sudoku_helpers.h : interface for sudoku_helpers.c
+sudoku_helpers.c : holds helper functions that sudoku.c needs
+
+In order to compile the program simply type 'make' in the console with sudoku
+You can execute it with './sudoku' 
+Expects 1 command line arg (name of image pbm file) or 0 command line args 
+and will accept from stdin
+
+
+---
+
+Makefile         : standard Makefile needed to compile the programs
+                   
+README           : this file
+
+
+-- things that work correctly and don't ---
+
+- from testing, it seems that all of our code works. We have done
+  extensive testing on sudoku with different 9 x 9 grids, and for
+  unblackedges, using the three tests written in lab, and the 
+  images that were provided in the directory listed in the spec. Prior
+  to all this, we conducted our own unit tests and incorporated 
+  feedback from HW1, so as of now, we have no reason to believe
+  there are any more bugs.
+
+
+Hours spend on completing assignment: 
+
+    Approx. 25 hours
+
+Acknowledgments: 
+    - TA Office Hours

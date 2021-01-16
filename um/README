@@ -1,0 +1,122 @@
+/*********************************************************
+ * HW 6 - um
+ * Comp 40 Spring 2020 
+ * 4/13/20
+ * Zoe Hsieh, Joy Kimambo
+ * zhsieh01, jkimam01
+ *
+ *********************************************************/
+
+To compile the program simply type 'make' in the console with um
+You can execute it with './um'
+Expects a file after (ending with .um) and (optional) a file of inputs (.0) and
+outputss through the unix pipeline
+
+--- 
+um.c                : module for reading in the command line and file, 
+
+memory.h            : interface of memory.c
+
+memory.c            : module that deals with our memory struct. Includes 
+                      initializing and freeing 
+
+load.h              : interface of load.c
+
+load.c              : module that packs given file into codewords and stores
+                      memory struct in order of given instructions 
+                    
+
+instructions.h      : interface of instructions.c
+
+instructions.c      : module that contains all 14 - RISC style instructions 
+                      needed to implement the UM. 
+                      this module is use to execute um programs by reading and
+                      decoding um_instructions and exeuting tasks.
+
+                      The module makes use of bitpacking module provided by 
+                      C40 admin.
+
+-- Module Testing -- 
+
+test_memory          : Test initialization of and freeing of memory data 
+                       structure
+                       Test name: init_free(); tested successfully
+
+-- UM Unit Tests --
+(all tests ends with outputting '\n' character (stdout to terminal is c
+leaner), so all our .1 files ends with a new line character as well)
+
+load_val.um       : tests the load value instructions (13) -- loads the 
+                    letter 'C' into register 1, and outputs register 1, 
+                    which should be 'C'
+
+halt_test.um      : program is immediately exited (no outputs)
+
+add_test.um       : 30 and 37 is loaded into the registers, should output 'C'
+
+input.um          : takes input from stdin and prints it to stdout
+
+nand_test.um      : loads '1' and '2' into registers, then calls NAND on the
+                    two values and then calls it again on itself with the
+                    result.
+                    Should output 0
+
+div_test.um       : loads 120 and 2 into registers, and should output '<'
+
+mult_test.um      : loads 50 and 2 into registers, and should output 'd'
+
+cond_move_test.um : loads 1 into register 3, and 'A' to register 2. Cmove is
+                    called,and if it works, the value 'A' should be moved to
+                    the register that is outputting the value. 
+
+seg_load_store    : loads 'A' into a register, and stores that segment at (0,0)
+                    then loads the segment into a register to ouput the same
+                    value. 
+
+map_test.um       : maps a segment, and if correct, the index that is outputted
+                    should be '1'
+
+unmap_test.um     : maps two new segments (each time printing its index value:
+                    '1' and '2'), then unmaps the segment at index 1. Then a
+                    new segment is mapped at that index, so the last output
+                    value is '1' if successful.
+
+load_prog.um      : creates a program with halt and loads it into our memory,
+                    then runs
+                    it.
+                    If it fails, the program would not halt and instead print
+                    'F' to output. 
+---
+
+Makefile         : standard Makefile needed to compile the programs
+                   
+README           : this file
+
+--
+
+How long it will take to execute 50 million instructions: 
+- using the command: time ./um midmark.um, our program ran in 7.501 sec.
+We counted the number of instructions midmark contained by keeping track
+of each instruction called.It contains 85070521 instructions, therefore 
+for 50 million instructions it would takeroughly 4.409 seconds
+
+
+-- things that work correctly and don't ---
+All UM instructions are working:
+- we have tested with multiple unit tests written ourselves as well as tests
+  provided by the UM binaries zip file.
+
+Time: The time taken for the um programs to run is inconsistent
+      That may be indication that optimization of the um emulator is not
+      best
+
+Hours spend on completing assignment: 
+
+    Approx. 5 hours spent on analyzing problems
+    Approx. 6 hours spent on preparing the design
+    Approx. 40 hours spent on solving the problems after our analysis
+
+
+Acknowledgments: 
+    - TA Office Hours
+

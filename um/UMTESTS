@@ -1,0 +1,12 @@
+halt_test.um
+load_val.um
+input_test.um
+nand_test.um
+add_test.um
+div_test.um
+mult_test.um
+cond_move_test.um
+map_test.um
+seg_load_store.um
+load_prog.um
+unmap_test.um

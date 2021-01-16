@@ -1,0 +1,60 @@
+/*********************************************************
+ * HW 1 - FILESNPIX
+ * Comp 40 Spring 202 
+ * 
+ * Zoe Hsieh, Rebecca Miller
+ * zhsieh01, rmille12
+ *
+ *********************************************************/
+
+Brightness.c     : reads in an image and returns the brightness of the image
+
+To compile the program simply type 'make' in the console with brightness
+You can execute it with './brightness'
+Expects 1 command line arg (name of image file) or 0 command line args and 
+will accept from stdin
+
+--- 
+
+readaline.h      : (provided) interface for readaline.c
+readaline.c      : reads a line that is passed in, and returns the size 
+                   (bytes) of the line
+
+In order to compile the program simply type 'make readaline.o' in the console
+Just a function, not a main
+
+simlines.c       : compares files that are passed in to the command line, and
+                   prints out which lines are similar in each file with the 
+                   corresponding line number
+
+In order to compile the program simply type 'make' in the console
+You can execute it with './simlines' and any file names to compare lines
+
+utility.h        : interface for utility.c
+utility.c        : holds general functions that are used in all three 
+                   programs above 
+
+string_funcs.h   : interface for string_funcs.c
+string_funcs.c   : holds string functions that are used my simlines
+
+Makefile         : standard Makefile needed to compile the program.
+                   modified to also compile utility and string_funcs
+README           : this file
+
+
+-- things that work correctly and don't ---
+
+- full credit version of readaline working
+- known (acceptable*) still reachable memory leak from Atom
+  *Piazza confirmed that this is allowed
+- simlines can handle large numbers of matches and text
+- no extra known bugs
+
+
+Hours spend on completing assignment: 30 hours
+
+Acknowledgments: 
+    - TA Office Hours
+    - https://www.geeksforgeeks.org/
+      remove-all-occurrences-of-a-character-in-a-string/
+      for inspiration on string parsing

@@ -1,0 +1,300 @@
+# check if there's one or values given, and push onto stack 
+
+.section init
+    .zero r0
+    .temp r6, r7
+
+.section rodata
+  jumptable:
+    .space 256
+
+# initialize and set up jumptable
+.section init 
+    # assign r5 as the iterator because it is volatile 
+    r5 := 0
+
+initialize_jumptable:
+    if (r5 >=s 256) goto jumptable_operations # TODO - need an s???
+    
+    # initialize displacement in register
+    r4 := jumptable + r5
+    
+    m[r0][r4] := input_error
+    r5:= r5 + 1
+    goto initialize_jumptable
+
+# set first 10 to 0-9 
+    # setting iterator to '0' 
+    r3 := '0'
+
+# Looping through to set spots 0-9 to digits 
+set_digits:
+    if (r3 >s 57) goto jumptable_operations
+    r4 := jumptable + r3
+    m[r0][r4] := make_digit
+    r3 := r3 + 1
+    goto set_digits
+
+jumptable_operations:
+    m[r0][jumptable + ' '] := waiting
+    m[r0][jumptable + '\n'] := newline
+    m[r0][jumptable + '+'] := add
+    m[r0][jumptable + '-'] := subtract
+    m[r0][jumptable + '*'] := multiply
+    m[r0][jumptable + '/'] := divide
+    m[r0][jumptable + '|'] := bitwise_or
+    m[r0][jumptable + '&'] := bitwise_and
+    m[r0][jumptable + '&'] := change_sign
+    m[r0][jumptable + '~'] := bitwise_complement
+    m[r0][jumptable + 's'] := swap
+    m[r0][jumptable + 'd'] := duplicate
+    m[r0][jumptable + 'p'r4] := pop
+    m[r0][jumptable + 'z'] := zero_stack
+    
+    goto waiting
+
+
+.section text
+
+invalid_char:
+  output "Unknown character: "
+  output r1
+  output " \n"
+  goto waiting
+
+entering: 
+  r1 := input()
+  
+  r3 := ~r1
+  if (r3 == 0) goto end
+  
+  if (r1<s '0') goto jump_to using r3
+  if (r1 >s '9') goto jump_to using r3
+  goto make_num
+
+waiting:
+  r1:= input()
+  
+  r3 := ~r1
+  if (r3 == 0) goto end
+  
+  jump_to:
+    r5 := jumptable + r1 //this was r4 :=, changed it to r5
+    r5 := m[r0][r5]
+    goto r5
+
+end: 
+  halt
+
+make_num:
+  pop r3 off stack r2
+  r3 := r3 * 10
+  r3 := r3 + r1
+  r3 := r3 - 48
+  
+  push r3 on stack r2 
+  goto entering 
+  
+make_digit: 
+  r3 := r1 - 48        # not ascii character value
+  push r3 on stack r2 
+  goto entering
+
+no_inputs:
+  output "No inputs given, expected at least 1 input\n"
+  goto waiting
+
+missing_inputs:
+  push r4 on stack r2
+  
+  output "Needs at least one more input \n"
+  goto waiting
+
+// check for correct num of inputs
+one_digit:
+
+two_digits:
+
+
+
+addition:
+  goto two_digits linking r1
+  
+  r3 := r3 + r4
+  push r3 on stack r2
+  
+  goto waiting
+
+subtraction:
+  goto two_digits linking r1
+  
+  r3 := r3 - r4
+  push r3 on stack r2
+  
+  goto waiting
+
+multiplication:
+  goto two_digits linking r1
+  
+  r3 := r3 * r4
+  push r3 on stack r2
+  goto waiting
+
+divison:
+  goto two_digits linking r1
+  if ( r4 == 0 ) goto divide_zero
+  if (r3 <s 0) goto first_neg using r1
+  if (r4 <s 0) goto second_neg using r1
+  
+  r3 := r3 / r4
+  push r3 on stack r2
+  goto waiting
+  
+first_neg:
+  r3 := r3 / r4
+  
+  if (r4 <s 0) r3 := 0 - r3
+  
+  push r3 on stack r2
+  goto waiting
+
+second_neg:
+  r3 := r3 / r4
+  r3 := 0 - r3
+  push r3 on stack r2
+  goto waiting
+
+divide_zero:
+  push r3 on stack r2
+  push r3 on stack r2
+  output "can't divide by zero \n"
+  goto waiting
+
+bitwise_or:
+  goto two_digits linking r1
+  
+  r3 := r3 | r4
+  push r3 on stack r2
+  goto waiting
+  
+bitwise_and:
+  goto two_digits linking r1
+  
+  r3 := r3 & r4
+  push r3 on stack r2
+  goto waiting
+
+change_sign:
+  goto one_digit linking r1
+  
+  r4 := 0 - r4
+  push r4 on stack r2
+  goto waiting
+  
+bitwise_complement:
+  goto one_digit linking r1
+  r4 := ~ r4
+  push r4 on stack r2
+  goto waiting
+
+swap:
+  goto two_digits linking r1
+  
+  push r4 on stack r2
+  push r4 on stack r2
+  goto waiting
+
+duplicate:
+  goto one_digit linking r1
+  
+  push r4 on stack r2
+  push r4 on stack r2
+  goto waiting
+  
+pop:
+  goto one_digit linking r1
+  goto waiting
+
+zero_stack:
+  
+# registers:
+# r0
+# r1
+# r2 - pointer of stack of values
+# r3 - current value that's being handled
+# r4 - pointer of stack of what will be printed
+# r5
+# r6 - temp
+# r7 - temp
+
+.section text
+
+newline:
+  r4 := print_stack_bot
+  
+  empty_val_stack:
+    .temps r1, r6, r7
+    if (r2 == val_stack_bot) goto empty_print_stack
+    
+    .temps r6, r7
+    pop r3 off stack r2
+    push r3 on stack r4
+    
+    goto print_digits
+    
+  empty_print_loop:
+    .temps r1, r6, r7
+    if (r4 == print_stack_bot) goto waiting
+    
+    .temps r6, r7
+
+    pop r3 off stack r4
+    push r3 on stack r2
+    
+    goto empty_print_stack
+  
+print_digits:
+  output ">>> "
+  
+  if (r3 == 0) goto print_zero
+  if (r3 == 0x80000000) goto print_most_neg using r1
+  if (r3 >s 0) goto init_loop using r1
+  
+  
+ 
+  output '-'
+  r3 := 0 - r3
+  
+  print_zero:
+    output "0/n"
+    goto empty_val_stack
+    
+  print_most_neg:
+    output "-2147483648\n"
+    goto empty_vstack
+    
+  init_loop:
+    r1 := 0
+  
+  store_loop:
+    r1 := r1 + 1
+    
+    r5 := r3 mod 10
+    push r5 on stack r4 // stores first digit onto the print stack
+    
+    r3 := r3 / 10
+    
+    if (r3 != 0) goto store_loop // next digit place
+    
+  print_recurs:
+    r1 := r1 - 1 // keeps track of # of digits
+    
+    pop r3 off stack r4
+    // TODO - do we need to turn it into a number? like r3 := r3 + 48
+    output r4 // TODO - shouldn't this be r3?
+    
+    if (r1 != 0) goto print_recurs
+    
+    output '\n'
+    
+    goto empty_val_stack

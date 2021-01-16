@@ -1,0 +1,11 @@
+ .zero r0
+ 
+.section data
+  .space 100000
+  print_stack_bot:
+
+  .space 100000
+  val_stack_bot:
+
+.section init
+  r2 := val_stack_bot
